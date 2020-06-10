@@ -4,9 +4,24 @@ from PIL import Image
 from app.yolo import YOLO
 import glob
 from app.models import Img
-def index(request):
-    return render(request,"index.html")
 import keras.backend as K
+import random
+def index(request):
+    context={}
+    number=set()
+    j=1
+    photo = glob.glob("./app/static/out/*.jpg")
+    path_file_number = len(photo)
+    while len(number) < 3:
+        a = random.randint(0, path_file_number-1)
+        number.add(a)
+    for i in number:
+        context["photo"+str(j)]="/static/out/"+str(photo[i].split("\\")[-1])
+        j+=1
+    print(context)
+
+    return render(request,"index.html",context)
+
 
 def predict(request):
     context=[]
@@ -29,5 +44,17 @@ def predict(request):
         "img":input_file,
         "predict":retfile
     }
+
+    number = set()
+    j = 1
+    photo = glob.glob("./app/static/out/*.jpg")
+    path_file_number = len(photo)
+    while len(number) < 3:
+        a = random.randint(0, path_file_number - 1)
+        number.add(a)
+    for i in number:
+        context["photo" + str(j)] = "/static/out/" + str(photo[i].split("\\")[-1])
+        j += 1
+
     K.clear_session()
     return render(request,"index.html",context)
