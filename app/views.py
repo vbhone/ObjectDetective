@@ -6,7 +6,7 @@ import glob
 from app.models import Img
 def index(request):
     return render(request,"index.html")
-
+import keras.backend as K
 
 def predict(request):
     context=[]
@@ -29,4 +29,5 @@ def predict(request):
         "img":input_file,
         "predict":retfile
     }
+    K.clear_session()
     return render(request,"index.html",context)
